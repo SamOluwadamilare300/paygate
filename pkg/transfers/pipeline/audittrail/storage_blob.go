@@ -2,6 +2,34 @@
 // Use of this source code is governed by an Apache License
 // license that can be found in the LICENSE file.
 
+
+/// Old imports gocloud.dev/blob and side-loads various packages to register implementations such as AWS S3, GCP Storage, Azure Storage, and in-memory. Please refer to specific documentation for each implementation.
+// package audittrail
+
+// import (
+// 	"bytes"
+// 	"context"
+// 	"fmt"
+// 	"time"
+
+// 	"github.com/moov-io/ach"
+// 	"github.com/moov-io/paygate/internal/gpgx"
+// 	"github.com/moov-io/paygate/pkg/config"
+// 	"github.com/moov-io/paygate/pkg/transfers/pipeline/output"
+// 	"github.com/moov-io/paygate/pkg/transfers/pipeline/transform"
+// 	"golang.org/x/crypto/openpgp"
+
+// 	"gocloud.dev/blob"
+// 	_ "gocloud.dev/blob/azureblob"
+// 	_ "gocloud.dev/blob/fileblob"
+// 	_ "gocloud.dev/blob/gcsblob"
+// 	_ "gocloud.dev/blob/memblob"
+// 	_ "gocloud.dev/blob/s3blob"
+// )
+
+
+
+// New imports gocloud.dev/blob and side-loads various packages to register implementations such as AWS S3, GCP Storage, Azure Storage, and in-memory. Please refer to specific documentation for each implementation.
 package audittrail
 
 import (
@@ -16,13 +44,9 @@ import (
 	"github.com/moov-io/paygate/pkg/transfers/pipeline/output"
 	"github.com/moov-io/paygate/pkg/transfers/pipeline/transform"
 	"golang.org/x/crypto/openpgp"
-
 	"gocloud.dev/blob"
-	_ "gocloud.dev/blob/azureblob"
 	_ "gocloud.dev/blob/fileblob"
-	_ "gocloud.dev/blob/gcsblob"
 	_ "gocloud.dev/blob/memblob"
-	_ "gocloud.dev/blob/s3blob"
 )
 
 // blobStorage implements Storage with gocloud.dev/blob which allows
