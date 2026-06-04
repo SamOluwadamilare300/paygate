@@ -1,9 +1,8 @@
 # Build stage
-FROM golang:1.21-alpine AS builder
+FROM golang:1.25-alpine AS builder
 
 WORKDIR /go/src/github.com/moov-io/paygate
 
-# No gcc needed - using modernc.org/sqlite (pure Go)
 ENV CGO_ENABLED=0
 ENV GOOS=linux
 ENV GOARCH=amd64
@@ -15,7 +14,7 @@ RUN go mod download
 COPY . .
 RUN go build -o /bin/paygate ./cmd/server/
 
-# Final stage - minimal image
+# Final stage
 FROM alpine:3.19
 
 RUN apk --no-cache add ca-certificates tzdata
