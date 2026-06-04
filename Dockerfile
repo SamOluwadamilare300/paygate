@@ -1,20 +1,30 @@
-FROM golang:1.16-buster as builder
+# Build stage
+FROM golang:1.21-alpine AS builder
+
 WORKDIR /go/src/github.com/moov-io/paygate
-RUN apt-get update && apt-get upgrade -y && apt-get install make gcc g++
+
+# No gcc needed - using modernc.org/sqlite (pure Go)
+ENV CGO_ENABLED=0
+ENV GOOS=linux
+ENV GOARCH=amd64
+ENV GONOSUMDB=*
+
+COPY go.mod go.sum ./
+RUN go mod download
+
 COPY . .
-RUN make build
+RUN go build -o /bin/paygate ./cmd/server/
 
-FROM debian:stable-slim
-LABEL maintainer="Moov <support@moov.io>"
-RUN apt-get update && apt-get upgrade -y && apt-get install -y ca-certificates
-COPY --from=builder /go/src/github.com/moov-io/paygate/bin/paygate /bin/paygate
+# Final stage - minimal image
+FROM alpine:3.19
 
-VOLUME "/data"
-ENV SQLITE_DB_PATH /data/paygate.db
-# RUN adduser -q --gecos '' --disabled-login --shell /bin/false moov
-# RUN chown -R moov: /data
-# USER moov
+RUN apk --no-cache add ca-certificates tzdata
 
-EXPOSE 8080
-EXPOSE 9090
-ENTRYPOINT ["/bin/paygate"]
+WORKDIR /app
+
+COPY --from=builder /bin/paygate /app/paygate
+COPY --from=builder /go/src/github.com/moov-io/paygate/examples/config.yaml /app/examples/config.yaml
+
+EXPOSE 8082 9092
+
+ENTRYPOINT ["/app/paygate"]

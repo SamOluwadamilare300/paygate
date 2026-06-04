@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: paygate
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: CONFIG_FILE
+        value: examples/config.yaml
+    ports:
+      - port: 8082
+        protocol: HTTP
